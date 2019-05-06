@@ -1,91 +1,81 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Link, BrowserRouter, Route,Switch,Redirect } from "react-router-dom";
+import { Link, BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Main from "./Main"
 import Item from "./Item"
 import Footer from "./MyFooter"
+import { connect } from "react-redux";
 
-class All extends Component{
-    render(){
+class All extends Component {
+    render() {
         return (
             <h3>所有列表1</h3>
         )
     }
 }
-class Like extends Component{
-    render(){
+class Like extends Component {
+    render() {
         return (
             <h3>所有列表2</h3>
         )
     }
 }
 
-export default class Home extends Component {
+class Home extends Component {
     render() {
-        let props=this.props;
+        let props = this.props;
         let data = props.data;
-        let length = data.length;
-        let selectData = data.filter((val) => {
-          debugger
-          return val.selected
-        })
-    
-        let likeData = data.filter((val) => {
-          return val.like
-        })
 
-        let pathName=props.pathName;
+        // let length = data.length;
+        // let selectData = data.filter((val) => {
+        //   return val.selected
+        // })
+        let likeData = data.filter((val) => {
+            return val.like
+        })
+        console.log(likeData.length)
+        let pathName = props.router.location.pathname;
         return (
             <div>
-                <h2>{pathName=="/"?"播放":"收藏"}列表
-                
+                <h2>{pathName == "/" ? "播放" : "收藏"}列表
+
                 <Link to="/add">添加歌曲</Link>
+
                 </h2>
-                <nav>
-                    <Link to="/">所有列表</Link>
-                    <span>|</span>
-                    <Link to="/like">收藏列表</Link>
-                </nav>
-            
-                <Route path="/" exact  render={()=>{
-                    debugger
-                    return (
-                        <Main
-                          data={props.data}
-                        isCheckAll={props.isCheckAll}
-                        checkAll={props.checkAll}
-                        setCheck={props.setCheck}
-                        setLike={props.setLike}
-                        remove={props.remove}/>
-                    )
-                }}></Route>
-                 <Route path="/like" exact  render={()=>{
-                     if(likeData.length==0){
-                         return <Redirect to="/"/>
-                     }
-                    return (
-                        <Main
-                          data={likeData}
-                        isCheckAll={props.isCheckAll}
-                        checkAll={props.checkAll}
-                        setCheck={props.setCheck}
-                        setLike={props.setLike}
-                        remove={props.remove}/>
-                    )
-                }}></Route>
-           <Footer
-           pathName={pathName}
-           length={props.data.length}
-           likeLength={likeData.length}
-           showList={props.showList}
-           selectedLength={selectData.length}
-           selectRemove={props.selectRemove}
-           removeSelectLike={props.removeSelectLike}
-           selectLike={props.selectLike}
-           likeListData={props.likeListData}
-           allListData={props.allListData}
-           />
+           
+                    <Route path="/" exact component={Main} />
+                    <Route path="/like" render={(e) => {
+                        // let len=data.filter((item)=>{
+                        //     return item.like;
+                        // }).length;
+                        // console.log(len,"长度")
+                        //    if(data.filter((item)=>{
+                        //        return item.like
+                        //     }).length==0){
+                        //         console.log("跳转")
+                        //     return    <Redirect to="/add"/>
+                        //     // 
+                        //    }
+
+                        // console.log("jinlai---------")
+                        // if (likeData.length == 0) {
+                        //     return <Redirect to="/" />
+                        // } else {
+
+                        //     return <Main location={e.location} />
+                        // }
+                        return likeData.length?<Main location={e.location}/>:<Redirect to="/"/>
+                    }
+
+                    } />
+
+              
+                <Footer pathName={pathName} />
             </div>
         )
     }
 }
+
+export default connect((state, props) => {
+    return state
+})(Home)
