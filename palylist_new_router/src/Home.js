@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Link, BrowserRouter, Route,Switch } from "react-router-dom";
+import { Link, BrowserRouter, Route,Switch,Redirect } from "react-router-dom";
 import Main from "./Main"
 import Item from "./Item"
 import Footer from "./MyFooter"
@@ -37,7 +37,10 @@ export default class Home extends Component {
         let pathName=props.pathName;
         return (
             <div>
-                <h2>{pathName=="/"?"播放":"收藏"}列表</h2>
+                <h2>{pathName=="/"?"播放":"收藏"}列表
+                
+                <Link to="/add">添加歌曲</Link>
+                </h2>
                 <nav>
                     <Link to="/">所有列表</Link>
                     <span>|</span>
@@ -57,6 +60,9 @@ export default class Home extends Component {
                     )
                 }}></Route>
                  <Route path="/like" exact  render={()=>{
+                     if(likeData.length==0){
+                         return <Redirect to="/"/>
+                     }
                     return (
                         <Main
                           data={likeData}
@@ -68,6 +74,7 @@ export default class Home extends Component {
                     )
                 }}></Route>
            <Footer
+           pathName={pathName}
            length={props.data.length}
            likeLength={likeData.length}
            showList={props.showList}

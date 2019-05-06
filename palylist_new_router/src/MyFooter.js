@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { Link, BrowserRouter, Route,Switch } from "react-router-dom";
 export default class MyFooter extends Component {
   render() {
     return (
@@ -13,12 +13,13 @@ export default class MyFooter extends Component {
                         this.props.selectRemove()}}/>
       <input type="button"  style={{display:this.props.length>0?"inline-block":"none"}}     value="收藏选中歌曲"  onClick={()=>{this.props.selectLike()}}/>
       <input type="button" style={{display:this.props.length>0?"inline-block":"none"}}  value="取消收藏选中歌曲" onClick={()=>{this.props.removeSelectLike()}} />
-      <input type="button"  style={{display:(this.props.showList&&this.props.likeLength>0)?"inline-block":"none"}} onClick={()=>{
+      {/* <input type="button"  style={{display:(this.props.showList&&this.props.likeLength>0)?"inline-block":"none"}} onClick={()=>{
         this.props.likeListData()}}   
         value="查看收藏清单"/>
       <input type="button"  style={{display:(!this.props.showList&&this.props.length>0)?"inline-block":"none"}} onClick={()=>{
         this.props.allListData()
-      }}  value="查看所有清单" />
+      }}  value="查看所有清单" /> */}
+      {this.props.pathName=="/"?<Link to="/like">查看收藏列表</Link>:<Link to="/">查看所有列表</Link>}
 
   </footer>
     )

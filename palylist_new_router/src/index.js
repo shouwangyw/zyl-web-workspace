@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Link, BrowserRouter, Route,Switch } from "react-router-dom";
+import { Link, BrowserRouter, Route,Switch,Redirect } from "react-router-dom";
 import App from "./App";
 import Home from "./Home";
 import List from "./List";
@@ -14,13 +14,7 @@ export default class Index extends Component {
 
             showList: true,
             data: [
-                {
-                    id: 0,
-                    title: "空白格",
-                    singer: "zyl",
-                    selected: true,
-                    like: true
-                }
+               
             ]
         }
     }
@@ -38,8 +32,7 @@ export default class Index extends Component {
     //     data
     //   })
     // }
-    add(title, singer) {
-
+    add=(title, singer)=> {
         let data = this.state.data;
         if (!title || !singer) {
             return
@@ -204,9 +197,20 @@ export default class Index extends Component {
                     </nav>
                     <hr></hr>
                     <Switch>
-                    {/* <Route path="/add" component={List}></Route> */}
+                    <Route path="/add" render={(e)=>{
+                      return(
+                      <List 
+                      length={this.state.data.length}
+                      add={this.add} 
+                      router={e}
+                      ></List>
+                      
+                      )  
+                    }}></Route>
                     <Route path="/"  render={(e)=>{
-              
+                            if(this.state.data.length==0){
+                                return <Redirect to="/add"/>
+                            }
                         return (
                             <Home  
                             pathName={e.location.pathname}
@@ -215,6 +219,15 @@ export default class Index extends Component {
                             checkAll={this.setCheckAll}
                             setCheck={this.setCheck}
                             setLike={this.setLike}
+                            length={this.state.data.length}
+                            likeLength={likeData.length}
+                            showList={this.state.showList}
+                            selectedLength={selectData.length}
+                            selectRemove={this.selectRemove}
+                            removeSelectLike={this.removeSelectLike}
+                            selectLike={this.selectLike}
+                            likeListData={this.likeListData}
+                            allListData={this.allListData}
                             remove={this.remove}/>
                         )
                     }}></Route>
